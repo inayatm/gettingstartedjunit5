@@ -1,0 +1,171 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "patientintake.ClinicCalendar",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1058538895 { 
+   	label=patientintake
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   ClinicCalendar1058538895[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ClinicCalendar</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   appointments: List&lt;PatientAppointment&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   today: LocalDate [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addAppointment(patientFirstName: String, patientLastName: String, doctorKey: String, dateTime: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >- getAppointmentForDate(tomorrow: LocalDate): List&lt;PatientAppointment&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ hasAppointments(localDate: LocalDate): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ performTodaysAllAppointments(): List&lt;PatientAppointment&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DateTimeConverter1058538895[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DateTimeConverter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ convertToDateTimeFromString(dateTime: String, today: LocalDate): LocalDateTime</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PatientAppointment1058538895[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PatientAppointment</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   appointmentDateTime: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   apptBmi: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   doctor: Doctor [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   patientFirstName: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   patientLastName: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+subgraph cluster_1585363366 { 
+   	label=notifier
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   UpcomingAppointmentNotifier492380029[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)UpcomingAppointmentNotifier</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   calendar: ClinicCalendar [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   notifier: EmailNotifier [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- buildEmailBody(appt: PatientAppointment): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ run()</TD></TR>
+<TR><TD ALIGN="LEFT" >- sendEmailNotificationForAppointment(appt: PatientAppointment)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+'edges    
+ClinicCalendar1058538895 -> DateTimeConverter1058538895[label="addAppointment() -> convertToDateTimeFromString()"];
+ClinicCalendar1058538895 -> PatientAppointment1058538895[label="appointments
+[0..*]"];
+UpcomingAppointmentNotifier492380029 -> ClinicCalendar1058538895[label="calendar
+[0..1]"];
+    
+}
+@enduml
